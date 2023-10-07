@@ -21,12 +21,12 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 #define ADC_SINGLE_ENDED_ADC1	      0x1
 #define ADC_SINGLE_ENDED_ADC2	      0x2
 #define ADC_SINGLE_ENDED_ADC3	      0x3
-#define ADC_SINGLE_ENDED_ADC4       0x4
-#define ADC_SINGLE_ENDED_ADC5       0x5
-#define ADC_SINGLE_ENDED_ADC6       0x6
-#define ADC_SINGLE_ENDED_ADC7       0x7
-#define V_BG					              0x1E
-#define GND					               	0x1F
+#define ADC_SINGLE_ENDED_ADC4	      0x4
+#define ADC_SINGLE_ENDED_ADC5	      0x5
+#define ADC_SINGLE_ENDED_ADC6	      0x6
+#define ADC_SINGLE_ENDED_ADC7	      0x7
+#define V_BG					       	      0x1E
+#define GND					          	    0x1F
 
 
 //differential channels *Positive_negative_gain*
