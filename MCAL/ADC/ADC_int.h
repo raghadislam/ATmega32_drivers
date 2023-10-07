@@ -18,9 +18,9 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 //Single ended input channels
 
 #define ADC_SINGLE_ENDED_ADC0	      0x0
-#define ADC_SINGLE_ENDED_ADC1		 0x1
-#define ADC_SINGLE_ENDED_ADC2		 0x2
-#define ADC_SINGLE_ENDED_ADC3       0x3
+#define ADC_SINGLE_ENDED_ADC1	      0x1
+#define ADC_SINGLE_ENDED_ADC2	      0x2
+#define ADC_SINGLE_ENDED_ADC3	      0x3
 #define ADC_SINGLE_ENDED_ADC4       0x4
 #define ADC_SINGLE_ENDED_ADC5       0x5
 #define ADC_SINGLE_ENDED_ADC6       0x6
