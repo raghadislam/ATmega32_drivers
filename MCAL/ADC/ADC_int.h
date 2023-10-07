@@ -33,12 +33,12 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 
 #define ADC0_ADC0_X10		  0x8
 #define ADC1_ADC0_X10		  0x9
-#define ADC0_ADC0_X200		0xA
-#define ADC1_ADC0_X200  	0xB
-#define ADC2_ADC2_X10  		0xC
-#define ADC3_ADC2_X10 	  0xD
-#define ADC2_ADC2_X200    0xE
-#define ADC3_ADC2_X200    0xF
+#define ADC0_ADC0_X200		  0xA
+#define ADC1_ADC0_X200		  0xB
+#define ADC2_ADC2_X10		  0xC
+#define ADC3_ADC2_X10		  0xD
+#define ADC2_ADC2_X200		  0xE
+#define ADC3_ADC2_X200		  0xF
 #define ADC0_ADC1	        0x10
 #define ADC1_ADC1	        0x11
 #define ADC2_ADC1	        0x12
