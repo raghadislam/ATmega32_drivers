@@ -16,7 +16,7 @@ the Hardware Abstraction Layer includes the following drivers:
 
 1-LCD
 
-2-keupad
+2-keypad
 
 3-seven_segment
 
