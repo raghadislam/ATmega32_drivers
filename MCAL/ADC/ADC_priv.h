@@ -12,25 +12,25 @@
 
 /* ADC reference voltage selection*/
 
-#define ADC_AREF		    88
+#define ADC_AREF	        88
 #define ADC_VCC		        99
 #define ADC_INTERNAL_VREF	11
 
 /*define the ADC right or left adjustment*/
 
 #define ADC_RIGHT_ADJUST    77
-#define ADC_LEFT_ADJUST	  	66
+#define ADC_LEFT_ADJUST	    66
 
 /* define the Enable/Disable state of the ADC peripheral, ADC interrupt and auto trigger */
 
-#define ADC_ENABLED			55
-#define ADC_DISABLED	    34
+#define ADC_ENABLED		    55
+#define ADC_DISABLED	            34
 
-#define ADC_INT_ENABLED		67
-#define ADC_INT_DISABLED    44
+#define ADC_INT_ENABLED		    67
+#define ADC_INT_DISABLED            44
 
-#define ADC_AUTO_TRIGGER_ENABLED		58
-#define ADC_AUTO_TRIGGER_DISABLED	    47
+#define ADC_AUTO_TRIGGER_ENABLED    58
+#define ADC_AUTO_TRIGGER_DISABLED   47
 
 /*ADC prescaler selection*/
 
@@ -73,15 +73,15 @@
 
 
 /*ADC enable bit*/
-#define ADCSRA_ADEN 		7
+#define ADCSRA_ADEN 	    7
 /*ADC start conversion*/
-#define ADCSRA_ADSC 		6
+#define ADCSRA_ADSC         6
 /*ADC auto trigger enable*/
 #define ADCSRA_ADATE	    5
 /*ADC interrupt flag*/
-#define ADCSRA_ADIF	        4
+#define ADCSRA_ADIF	    4
 /*ADC interrupt enable*/
-#define ADCSRA_ADIE	        3
+#define ADCSRA_ADIE	    3
 
 /*ADC prescaler bits*/
 #define ADCSRA_ADPS2        2
@@ -99,17 +99,17 @@
 
 
 /*ADC Auto Trigger Source bits*/
-#define ADC_FREE_RUNNING			0
+#define ADC_FREE_RUNNING		0
 #define ADC_ANALOG_COMPARATOR		1
-#define ADC_EXTI0					2
+#define ADC_EXTI0			2
 #define ADC_TIMER0_COMPARE_MATCH	3
-#define ADC_TIMER0_OVERFLOW			4
-#define ADC_TIMER1_COMPARE_MATCH_B  5
-#define ADC_TIMER1_OVERFLOW			6
+#define ADC_TIMER0_OVERFLOW		4
+#define ADC_TIMER1_COMPARE_MATCH_B n    5
+#define ADC_TIMER1_OVERFLOW		6
 #define ADC_TIMER1_CAPTURE_EVENT	7
 
 /* single conversion mode*/
-#define ADC_SINGLE_CONVERSION       71
+#define ADC_SINGLE_CONVERSION           71
 
 
 /*======================= ADCL and ADCH =======================*/
@@ -118,7 +118,7 @@
 
 #define ADCL 		        *((volatile u16*)0x24)
 
-#define ADCVAL_10BITS       *((volatile u16 *)(0x24))
+#define ADCVAL_10BITS          *((volatile u16 *)(0x24))
 
 
 
@@ -161,8 +161,8 @@
 #define LOW 			0
 #define HIGH			1
 
-#define IDLE 9
-#define BUSY 8
+#define IDLE                    9
+#define BUSY                    8
 
 
 
