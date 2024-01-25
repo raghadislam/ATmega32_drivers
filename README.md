@@ -13,6 +13,8 @@ the Microcontroller Abstraction Layer includes the following drivers:
 
 5-TIMER
 
+6-WDT
+
 # HAL Layer
 the Hardware Abstraction Layer includes the following drivers:
 
