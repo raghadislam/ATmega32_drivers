@@ -10,31 +10,31 @@
 
 
 /**************************************************************************************
- *                                  Timer0 Registers                                 *
+ *                                  Timer0 Registers                                  *
  **************************************************************************************/
 
-#define TCCR0 			*((volatile u8*)0x53)  /* Timer0 control register */
-#define TCCR0_CS00		0					   /* Prescaler bit 0 */
-#define TCCR0_CS01		1					   /* Prescaler bit 1 */
-#define TCCR0_CS02		2					   /* Prescaler bit 2 */
-#define TCCR0_WGM01		3					   /* Waveform generation mode 1 */
-#define TCCR0_COM00		4					   /* Compare Output Mode, Phase Correct, fast and non-PWM Mod0 */
-#define TCCR0_COM01		5					   /* Compare Output Mode, Phase Correct, fast and non-PWM Mod1 */
-#define TCCR0_WGM00		6					   /* Waveform generation mode 0 */
-#define TCCR0_FOC0		7					   /*Force Output Compare, must be set to 0 at PWM mode*/
+#define TCCR0 			*((volatile u8*)0x53)		/* Timer0 control register */
+#define TCCR0_CS00		0							/* Prescaler bit 0 */
+#define TCCR0_CS01		1							/* Prescaler bit 1 */
+#define TCCR0_CS02		2							/* Prescaler bit 2 */
+#define TCCR0_WGM01		3							/* Waveform generation mode 1 */
+#define TCCR0_COM00		4							/* Compare Output Mode, Phase Correct, fast and non-PWM Mod0 */
+#define TCCR0_COM01		5							/* Compare Output Mode, Phase Correct, fast and non-PWM Mod1 */
+#define TCCR0_WGM00		6							/* Waveform generation mode 0 */
+#define TCCR0_FOC0		7							/*Force Output Compare, must be set to 0 at PWM mode*/
 
-#define TCNT0			*((volatile u8*)0x52)  /*Timer/Counter0 (8 Bits)*/
-
-
-#define OCR0			*((volatile u8*)0x5c)  /* Output compare register */
+#define TCNT0			*((volatile u8*)0x52)		/*Timer/Counter0 (8 Bits)*/
 
 
-#define TIMSK			*((volatile u8*)0x59)  /* Timer mask */
-#define TIMSK_OCIE0		1					   /* Timer/Counter0 Output Compare Match Interrupt Enable */
-#define TIMSK_TOIE0		0					   /*Timer/Counter0 Overflow Interrupt Enable*/
+#define OCR0			*((volatile u8*)0x5c)		/* Output compare register */
+
+
+#define TIMSK			*((volatile u8*)0x59)		/* Timer mask */
+#define TIMSK_OCIE0		1							/* Timer/Counter0 Output Compare Match Interrupt Enable */
+#define TIMSK_TOIE0		0							/*Timer/Counter0 Overflow Interrupt Enable*/
 
 /**************************************************************************************
- *                                  Timer1 Registers                                 *
+ *                                  Timer1 Registers                                  *
  **************************************************************************************/
 
 #define TCCR1A			*((volatile u8*)0x4f)		/*Timer/Counter1 Control Register A*/
@@ -49,20 +49,19 @@
 
 
 #define TCCR1B			*((volatile u8*)0x4e)		/*Timer/Counter1 Control Register B*/
-#define TCCR1B_CS10		0
-#define TCCR1B_CS11		1
-#define TCCR1B_CS12		2
-#define TCCR1B_WGM12	3
-#define TCCR1B_WGM13	4
-#define TCCR1B_ICES1	6
-#define TCCR1B_ICNC1	7
+#define TCCR1B_CS10		0                           /* Prescaler bit 0 */
+#define TCCR1B_CS11		1                           /* Prescaler bit 1 */
+#define TCCR1B_CS12		2                           /* Prescaler bit 2 */
+#define TCCR1B_WGM12	3                           /* Waveform generation mode  */
+#define TCCR1B_WGM13	4                           /* Waveform generation mode  */
+#define TCCR1B_ICES1	6							/*  Input Capture Edge Select */
+#define TCCR1B_ICNC1	7							/*  Input Capture Noise Canceler */
 
 
-//#define TIMSK			*((volatile u16*)0x59)
-#define TIMSK_TOIE1		2
-#define TIMSK_OCIE1B	3
-#define TIMSK_OCIE1A	4
-#define TIMSK_TICIE1	5
+#define TIMSK_TOIE1		2							/* Timer/Counter1, Input Capture Interrupt Enable */
+#define TIMSK_OCIE1B	3                           /* Timer/Counter1, Timer/Counter1, Output Compare B Match Interrupt Enable */
+#define TIMSK_OCIE1A	4                           /* Timer/Counter1, Timer/Counter1, Output Compare A Match Interrupt Enable*/
+#define TIMSK_TICIE1	5                           /* Timer/Counter1, Overflow Interrupt Enable */
 
 
 #define TCNT1			*((volatile u16*)0x4c)
@@ -75,7 +74,7 @@
 
 
 /**************************************************************************************
- *                                  Timer2 Registers                                 *
+ *                                  Timer2 Registers                                  *
  **************************************************************************************/
 
 #define TCCR2			*((volatile u8*)0x45)			/*Timer/Counter2 Control Register A*/
@@ -94,26 +93,18 @@
 #define OCR2			*((volatile u8*)0x43)  			/* Output compare register */
 
 
-#define TIMSK_OCIE2		7					   /* Timer/Counter2 Output Compare Match Interrupt Enable */
-#define TIMSK_TOIE2		6					   /*Timer/Counter2 Overflow Interrupt Enable*/
-
-
-
-
-
-
-
-
+#define TIMSK_OCIE2		7								/* Timer/Counter2 Output Compare Match Interrupt Enable */
+#define TIMSK_TOIE2		6								/*Timer/Counter2 Overflow Interrupt Enable*/
 
 /** timers mode **/
 
 #define TIMER_MODE_CTC				1
 #define TIMER_MODE_OVE 				2
 #define TIMER_MODE_PWM 				3
-#define TIMER_MODE_FASTPWM			4
-#define TIMER_MODE_PWM_8BIT			5
-#define TIMER_MODE_PWM_9BIT			6
-#define TIMER_MODE_PWM_10BIT		7
+#define TIMER_MODE_PWM_8BIT			4
+#define TIMER_MODE_PWM_9BIT			5
+#define TIMER_MODE_PWM_10BIT		6
+#define TIMER_MODE_FASTPWM			7
 #define TIMER_MODE_FAST_PWM_8BIT	8
 #define TIMER_MODE_FAST_PWM_9BIT	8
 #define TIMER_MODE_FAST_PWM_10BIT	10
@@ -143,13 +134,14 @@
 
 /** pwm/fast pwm mode selections **/
 
-#define CLEAR_ON_COMP_SET_ON_TOP	10  // non inverted
-#define SET_ON_COMP_CLEAR_ON_TOP	11  // inverted
-#define CLEAR_ON_UP_SET_ON_DOWN		13  // non inverted
-#define SET_ON_UP_CLEAR_ON_DOWN		14  // inverted
+#define CLEAR_ON_COMP_SET_ON_TOP	10  /* non inverted */
+#define SET_ON_COMP_CLEAR_ON_TOP	11  /* inverted */
+#define CLEAR_ON_UP_SET_ON_DOWN		13  /* non inverted */
+#define SET_ON_UP_CLEAR_ON_DOWN		14  /* inverted */
 #define OC_DISCONNECTED				15
 
 
+/* Private Macros for Timers initialization */
 
 #define TIMER0			0
 #define TIMER1			1
@@ -168,12 +160,15 @@
 #define RISING_EDGE		21
 #define FALLING_EDGE	22
 
+#define INT_ENABLE		99
+#define INT_DISABLE		98
 
-/*========================== Setting the Timer overflow according to the configured prescaler ==========================*/
 
-#define TMR_TIMER0_TOVF ((TIMER0_MAX * TIMER0_PRESCALER * 1000000UL)/ SYSTEM_CLK)
-#define TMR_TIMER1_TOVF ((TIMER1_MAX * TIMER1_PRESCALER * 1000000ULL)/ SYSTEM_CLK)
-#define TMR_TIMER2_TOVF ((TIMER2_MAX * TIMER2_PRESCALER * 1000000ULL)/ SYSTEM_CLK)
+/*============== Setting the Timer overflow according to the configured prescaler ==============*/
+
+#define TIMER0_TOVF ((TIMER0_MAX * TIMER0_PRESCALER * 1000000UL)/ SYSTEM_CLK)
+#define TIMER1_TOVF ((TIMER1_MAX * TIMER1_PRESCALER * 1000000ULL)/ SYSTEM_CLK)
+#define TIMER2_TOVF ((TIMER2_MAX * TIMER2_PRESCALER * 1000000ULL)/ SYSTEM_CLK)
 
 
 

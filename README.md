@@ -11,6 +11,8 @@ the Microcontroller Abstraction Layer includes the following drivers:
 
 4-GIE
 
+5-TIMER
+
 # HAL Layer
 the Hardware Abstraction Layer includes the following drivers:
 
