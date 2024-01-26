@@ -50,6 +50,12 @@ static void TIMER_VidSetTIMER2CTCTime(f32 Copy_f32TimerCtr);
 static void (*Global_pvTimerCallBackArr[6])(void) = {NULL,NULL,NULL,NULL,NULL,NULL};
 
 
+/*================== Timer Functions ====================*/
+
+/**
+ * @brief functions to initialize timer0 prepheral.
+ * @return the error statues.
+ */
 ES_t TIMER0_enuInit(void)
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -201,6 +207,11 @@ ES_t TIMER0_enuInit(void)
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief functions to initialize timer1 prepheral.
+ * @return the error statues.
+ */
 ES_t TIMER1_enuInit()
 {
 
@@ -506,6 +517,11 @@ ES_t TIMER1_enuInit()
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief functions to initialize timer2 prepheral.
+ * @return the error statues.
+ */
 ES_t TIMER2_enuInit()
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -664,6 +680,14 @@ ES_t TIMER2_enuInit()
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief function to disable a specific timer prepheral.
+ * @param[in] TIMER id:  	  1- TIMER0
+ *                            2- TIMER1
+ *                            3- TIMER2
+ * @return the error statues.
+ */
 ES_t TIMER_enuDisable(u8 Copy_u8TimerId)
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -691,55 +715,16 @@ ES_t TIMER_enuDisable(u8 Copy_u8TimerId)
 
 }
 
-ES_t ICU_enuSetTriggerEdge(u8 Copy_u8TRiggerEdge)
-{
-	ES_t Local_enuErrorState = ES_OK;
 
-	switch(Copy_u8TRiggerEdge)
-	{
-	case RISING_EDGE:
-		Set_bit(TCCR1B,TCCR1B_ICES1);
-		break;
-	case FALLING_EDGE:
-		Clr_bit(TCCR1B,TCCR1B_ICES1);
-		break;
-	default:
-		Local_enuErrorState = ES_UNSUPPORTED_MODE;
-	}
-
-	return Local_enuErrorState;
-}
-
-void ICU_vidEnableInterrupt()
-{
-	Set_bit(TIMSK,TIMSK_TICIE1);
-}
-
-void ICU_vidDisableInterrupt()
-{
-	Clr_bit(TIMSK,TIMSK_TICIE1);
-}
-
-ES_t ICU_enuGetInputCapture(u16* Copy_pu16InputCapture)
-{
-	ES_t Local_enuErrorState = ES_OK;
-
-	if(Copy_pu16InputCapture != NULL)
-	{
-		*Copy_pu16InputCapture = ICR1;
-	}
-	else
-	{
-		Local_enuErrorState = ES_NULL_POINTER;
-	}
-
-	return Local_enuErrorState;
-}
-
-/*to do : function to enable/ disable the interrupt I send its ID
- * function should include all interrupts
- * */
-
+/**
+ * @brief function to set the preload value of a specific timer prepheral for post build.
+ * @param[in] Copy_u8TimerId:  	1- TIMER0
+ *                           	2- TIMER1A
+ *                            	3- TIMER1B
+ *                            	4- TIMER2
+ * @param[in]  Copu_u16Val:  setting Value.
+ * @return the error statues.
+ */
 ES_t Timer_enuSetTimerVal(u8 Copy_TimerId, u16 Copu_u16Val)
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -772,6 +757,16 @@ ES_t Timer_enuSetTimerVal(u8 Copy_TimerId, u16 Copu_u16Val)
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief function to get the value of a specific timer prepheral for post build.
+ * @param[in] Copu_u16Val:  	 1- TIMER0
+ *                           	 2- TIMER1A
+ *                            	 3- TIMER1B
+ *                           	 4- TIMER2
+ * @param[out] Copu_u16Val : Timer reading.
+ * @return the error statues.
+ */
 ES_t Timer_enuGetTimerVal(u8 Copy_TimerId, u16* Copu_u16Val)
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -795,17 +790,64 @@ ES_t Timer_enuGetTimerVal(u8 Copy_TimerId, u16* Copu_u16Val)
 	return Local_enuErrorState;
 }
 
-ES_t TIMER0_enuSetCompareMatchVAl(u16 Copy_u16Val)
+
+/**
+ * @brief function to set the Compare Match value of a specific timer prepheral for post build.
+ * @param[in] Copu_u16Val:  	1- TIMER0
+ *                            	2- TIMER1A
+ *                            	3- TIMER1B
+ *                            	4- TIMER2
+ * @param[in] Compare Match Value.
+ * @return the error statues.
+ */
+ES_t TIMER_enuSetCompareMatchVAl(u8 Copy_u8TimerID, u16 Copy_u16Val)
 {
-	ES_t Local_enuErrorState = ES_NOK;
-	if(Copy_u16Val <= TIMER0_MAX)
+	ES_t Local_enuErrorState = ES_OK;
+	switch(Copy_u8TimerID)
 	{
-		OCR0 =  Copy_u16Val;
-		Local_enuErrorState = ES_OK;
+	case TIMER0:
+		if(Copy_u16Val < TIMER0_MAX)
+		{
+			OCR0 =  Copy_u16Val;
+		}
+		else Local_enuErrorState = ES_NOK;
+		break;
+	case TIMER1A:
+		if(Copy_u16Val < TIMER1_MAX)
+		{
+			OCR1A =  Copy_u16Val;
+		}
+		else Local_enuErrorState = ES_NOK;
+		break;
+	case TIMER1B:
+		if(Copy_u16Val < TIMER1_MAX)
+		{
+			OCR1B =  Copy_u16Val;
+		}
+		else Local_enuErrorState = ES_NOK;
+		break;
+	case TIMER2:
+		if(Copy_u16Val < TIMER2_MAX)
+		{
+			OCR2 =  Copy_u16Val;
+		}
+		else Local_enuErrorState = ES_NOK;
+		break;
 	}
+
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief function to set the desired time for the chosen timer prepheral.
+ * @param[in] Copy_u8TimerId:	1- TIMER0
+ *                           	2- TIMER1A
+ *                           	3- TIMER1B
+ *                           	4- TIMER2
+ *@param[in] Copy_u32Time_us: required time in microseconed.
+ * @return the error statues.
+ */
 ES_t TIMER_enuSetDesiredTime_us(u8 Copy_u8TimerId, f32 Copy_u32Time_us)
 {
 
@@ -860,6 +902,16 @@ ES_t TIMER_enuSetDesiredTime_us(u8 Copy_u8TimerId, f32 Copy_u32Time_us)
 	return Local_enuErrorState;
 }
 
+
+/**
+ * @brief function to set the desired Duty cycle of the PWM signal for the chosen timer prepheral.
+ * @param[in] TIMER id:  	  1- TIMER0
+ *                            2- TIMER1A
+ *                            3- TIMER1B
+ *                            4- TIMER2
+ * @param[in] Copy_u8DutyCycle: Duty Cycle value between 0 to 100.
+ * @return the error statues.
+ */
 ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -988,6 +1040,133 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 }
 
 
+/**
+ * @brief function to Get the period time for a signal using ICU.
+ * @param[out] Copy_u16Period: the period of the signal
+ * @return the error statues.
+ */
+ES_t ICU_enuGetPeriod_us(u16* Copy_u16Period)
+{
+	ES_t Local_enuErrorState = ES_OK;
+	if(Copy_u16Period != NULL)
+	{
+		*Copy_u16Period = ((Global_u16PeriodTicks2-Global_u16PeriodTicks1)*1000000ULL*TIMER1_PRESCALER)/SYSTEM_CLK;
+	}
+	else Local_enuErrorState = ES_NULL_POINTER;
+	return Local_enuErrorState;
+}
+
+
+/**
+ * @brief function to Get the on time for a signal using ICU.
+ * @param[out] Copy_u16OnTime: the on time of the signal
+ * @return the error statues.
+ */
+ES_t ICU_enuGetOnTime_us(u16* Copy_u16OnTime)
+{
+	ES_t Local_enuErrorState = ES_OK;
+	if(Copy_u16OnTime != NULL)
+	{
+		*Copy_u16OnTime = ((Global_u16ONTicks)*1000000ULL*TIMER1_PRESCALER)/SYSTEM_CLK;
+	}
+	else Local_enuErrorState = ES_NULL_POINTER;
+	return Local_enuErrorState;
+}
+
+
+/**
+ * @brief function to Get the Duty Cycle for a signal using ICU.
+ * @param[out] Copy_u8DutyCycle: the Duty Cycle of the signal
+ * @return the error statues.
+ */
+ES_t ICU_enuGetDutyCycle(u8* Copy_u8DutyCycle)
+{
+	ES_t Local_enuErrorState = ES_OK;
+	if(Copy_u8DutyCycle != NULL)
+	{
+		*Copy_u8DutyCycle = (Global_u16ONTicks * 100) / (Global_u16PeriodTicks2-Global_u16PeriodTicks1) ;
+	}
+	else Local_enuErrorState = ES_NULL_POINTER;
+	return Local_enuErrorState;
+}
+
+
+/**
+ * @brief function to cahnge the Trigger Edge for the ICU in timer 1.
+ * @param[in] trigger edge:   1- ICU_RISING_EDGE
+ *                            2- ICU_FALLING_EDGE
+ * @return the error statues.
+ */
+ES_t ICU_enuSetTriggerEdge(u8 Copy_u8TRiggerEdge)
+{
+	ES_t Local_enuErrorState = ES_OK;
+
+	switch(Copy_u8TRiggerEdge)
+	{
+	case RISING_EDGE:
+		Set_bit(TCCR1B,TCCR1B_ICES1);
+		break;
+	case FALLING_EDGE:
+		Clr_bit(TCCR1B,TCCR1B_ICES1);
+		break;
+	default:
+		Local_enuErrorState = ES_UNSUPPORTED_MODE;
+	}
+
+	return Local_enuErrorState;
+}
+
+
+/**
+ * @brief void function to Disable ICU Interrupt.
+ */
+void ICU_vidEnableInterrupt()
+{
+	Set_bit(TIMSK,TIMSK_TICIE1);
+}
+
+
+/**
+ * @brief void function to Enable ICU Interrupt.
+ */
+void ICU_vidDisableInterrupt()
+{
+	Clr_bit(TIMSK,TIMSK_TICIE1);
+}
+
+
+/**
+ * @brief function to get the value of a the input capture register (ICR1).
+ * @param[out] input capture register reading.
+ * @return the error statues.
+ */
+ES_t ICU_enuGetInputCapture(u16* Copy_pu16InputCapture)
+{
+	ES_t Local_enuErrorState = ES_OK;
+
+	if(Copy_pu16InputCapture != NULL)
+	{
+		*Copy_pu16InputCapture = ICR1;
+	}
+	else
+	{
+		Local_enuErrorState = ES_NULL_POINTER;
+	}
+
+	return Local_enuErrorState;
+}
+
+
+/**
+ * @brief function to receive the addresse of the ISR function of a specific timer prepheral.
+ * @param[in] TIMER id:  	  1- TIMER0
+ * 							  2- TIMER1  (overflow)
+ *                            2- TIMER1A (CTC A)
+ *                            3- TIMER1B (CTC B)
+ *                            4- TIMER2
+ * @param[in] the notification function.
+ * @return the error statues.
+ */
 ES_t TIMER_enuSetCallBack(u8 Copy_u8InterruptId, void (*Copy_pvCallBackFunction)(void))
 {
 	ES_t Local_enuErrorState = ES_OK;
@@ -1022,38 +1201,7 @@ ES_t TIMER_enuSetCallBack(u8 Copy_u8InterruptId, void (*Copy_pvCallBackFunction)
 	return Local_enuErrorState;
 }
 
-ES_t ICU_enuGetPeriod_us(u16* Copy_u16Period)
-{
-	ES_t Local_enuErrorState = ES_OK;
-	if(Copy_u16Period != NULL)
-	{
-		*Copy_u16Period = ((Global_u16PeriodTicks2-Global_u16PeriodTicks1)*1000000ULL*TIMER1_PRESCALER)/SYSTEM_CLK;
-	}
-	else Local_enuErrorState = ES_NULL_POINTER;
-	return Local_enuErrorState;
-}
-
-ES_t ICU_enuGetOnTime_us(u16* Copy_u16OnTime)
-{
-	ES_t Local_enuErrorState = ES_OK;
-	if(Copy_u16OnTime != NULL)
-	{
-		*Copy_u16OnTime = ((Global_u16ONTicks)*1000000ULL*TIMER1_PRESCALER)/SYSTEM_CLK;
-	}
-	else Local_enuErrorState = ES_NULL_POINTER;
-	return Local_enuErrorState;
-}
-
-ES_t ICU_enuGetDutyCycle(u8* Copy_u8DutyCycle)
-{
-	ES_t Local_enuErrorState = ES_OK;
-	if(Copy_u8DutyCycle != NULL)
-	{
-		*Copy_u8DutyCycle = (Global_u16ONTicks * 100) / (Global_u16PeriodTicks2-Global_u16PeriodTicks1) ;
-	}
-	else Local_enuErrorState = ES_NULL_POINTER;
-	return Local_enuErrorState;
-}
+/*====================== ISR Functions ======================*/
 
 /*Timer/Counter1 Capture Event*/
 
@@ -1252,7 +1400,7 @@ static void TIMER_VidSetTimer0OVFTime(f32 Copy_f32TimerCtr)
 		}
 		else /* float */
 		{
-			// preload = 2^n(1-0.y) = 2^n - 0.y*2^n  // 0.y = Copy_f32TimerCtr - (u32)Copy_f32TimerCtr
+			/* preload = 2^n(1-0.y) = 2^n - 0.y*2^n  --> 0.y = Copy_f32TimerCtr - (u32)Copy_f32TimerCtr */
 
 			Local_f32FractionCount = TIMER0_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);  // 2^n * 0.y
 
@@ -1353,13 +1501,8 @@ static void TIMER_VidSetTimer2OVFTime(f32 Copy_f32TimerCtr)
 	}
 }
 
-/*----------------------------------------------------------------------------------------
- * ---------------------------------------------------------------------------------------
- * ---------------------------------------------------------------------------------------*/
-
 static void TIMER_VidSetTIMER0CTCTime(f32 Copy_f32TimerCtr)
 {
-	//f32 Local_f32FractionCount;
 	if (Copy_f32TimerCtr == 1)
 	{
 		Global_u32ReqTimer0Cntr = 1;
@@ -1392,7 +1535,6 @@ static void TIMER_VidSetTIMER0CTCTime(f32 Copy_f32TimerCtr)
 
 static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 {
-	//f32 Local_f32FractionCount;
 	if (Copy_f32TimerCtr == 1)
 	{
 		Global_u32ReqTimer1Cntr = 1;
@@ -1439,7 +1581,6 @@ static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 	}
 	else if (Copy_f32TimerCtr < 1)
 	{
-		//Local_f32FractionCount = TIMER1_MAX * Copy_f32TimerCtr;
 		Global_u32ReqTimer1Cntr = 1;
 		if (TIMER1_CTC_STATE_A == ENABLED)
 		{

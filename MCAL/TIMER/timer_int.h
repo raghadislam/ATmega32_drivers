@@ -28,11 +28,6 @@
 #define ICU_FALLING_EDGE	22
 
 
-/*===== interrupt Actions (enable/disable) ======*/
-
-#define INT_ENABLE			99
-#define INT_DISABLE			98
-
 /**
  * @brief functions to initialize timer prepherals (0, 1, 2).
  *
@@ -66,7 +61,7 @@ ES_t TIMER_enuDisable(u8 Copy_u8TimerId);
  *
  * @return the error statues.
  */
-ES_t TIMER0_enuSetCompareMatchVAl(u16 Copy_u16Val);
+ES_t TIMER_enuSetCompareMatchVAl(u8 Copy_u8TimerID, u16 Copy_u16Val);
 
 
 /**
