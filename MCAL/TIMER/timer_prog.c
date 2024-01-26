@@ -60,7 +60,7 @@ ES_t TIMER0_enuInit(void)
 {
 	ES_t Local_enuErrorState = ES_OK;
 
-	if(TIMER0_STATE == ENABLED)
+	if(TIMER0_STATE == TIMER_ENABLED)
 	{
 		/*---------------------------initialize the timer0 mode---------------------------*/
 
@@ -219,7 +219,7 @@ ES_t TIMER1_enuInit()
 
 	/*---------------------------initialize the timer mode---------------------------*/
 
-	if((TIMER1_STATE_A == ENABLED) || (TIMER1_STATE_B == ENABLED) )
+	if((TIMER1_STATE_A == TIMER_ENABLED) || (TIMER1_STATE_B == TIMER_ENABLED) )
 	{
 		if	(TIMER1_MODE == TIMER_MODE_OVE)
 		{
@@ -241,7 +241,7 @@ ES_t TIMER1_enuInit()
 			Set_bit(TCCR1B,TCCR1B_WGM12);
 			Clr_bit(TCCR1B,TCCR1B_WGM13);
 
-			if(TIMER1_CTC_STATE_A == ENABLED)
+			if(TIMER1_CTC_STATE_A == TIMER_ENABLED)
 			{
 				/*set action on OC1A on compare match*/
 				switch(TIMER1_CTC_ACTION)
@@ -269,7 +269,7 @@ ES_t TIMER1_enuInit()
 				Set_bit(TIMSK,TIMSK_OCIE1A);
 			}
 
-			if(TIMER1_CTC_STATE_B == ENABLED)
+			if(TIMER1_CTC_STATE_B == TIMER_ENABLED)
 			{
 				/*set action on OC1A on compare match*/
 				switch(TIMER1_CTC_ACTION)
@@ -370,7 +370,7 @@ ES_t TIMER1_enuInit()
 
 		if((TIMER1_MODE >= TIMER_MODE_FASTPWM) && (TIMER1_MODE <= TIMER_MODE_FASTPWM_OCRA1))
 		{
-			if(TIMER1_FASTPWM_STATE_A == ENABLED )
+			if(TIMER1_FASTPWM_STATE_A == TIMER_ENABLED )
 			{
 				if(TIMER1_FASTPWM_SELECTION_A == CLEAR_ON_COMP_SET_ON_TOP)
 				{
@@ -385,7 +385,7 @@ ES_t TIMER1_enuInit()
 				else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 			}
 
-			if(TIMER1_FASTPWM_STATE_B == ENABLED )
+			if(TIMER1_FASTPWM_STATE_B == TIMER_ENABLED )
 			{
 				if(TIMER1_FASTPWM_SELECTION_B == CLEAR_ON_COMP_SET_ON_TOP)
 				{
@@ -406,7 +406,7 @@ ES_t TIMER1_enuInit()
 
 		if((TIMER1_MODE >= TIMER_MODE_PWM) && (TIMER1_MODE <= TIMER_MODE_PWM_10BIT))
 		{
-			if(TIMER1_PWM_STATE_A == ENABLED )
+			if(TIMER1_PWM_STATE_A == TIMER_ENABLED )
 			{
 				if(TIMER1_PWM_SELECTION_A == CLEAR_ON_UP_SET_ON_DOWN)
 				{
@@ -426,7 +426,7 @@ ES_t TIMER1_enuInit()
 				else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 			}
 
-			if(TIMER1_PWM_STATE_B == ENABLED )
+			if(TIMER1_PWM_STATE_B == TIMER_ENABLED )
 			{
 				if(TIMER1_PWM_SELECTION_B == CLEAR_ON_UP_SET_ON_DOWN)
 				{
@@ -488,7 +488,7 @@ ES_t TIMER1_enuInit()
 		else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 
 		/*---------------------------initialize the ICU mode---------------------------*/
-		if(ICU_STATE == ENABLED)
+		if(ICU_STATE == TIMER_ENABLED)
 		{
 			/*set input capture trigger source*/
 			switch(ICU_TRIGGER)
@@ -526,7 +526,7 @@ ES_t TIMER2_enuInit()
 {
 	ES_t Local_enuErrorState = ES_OK;
 
-	if(TIMER2_STATE == ENABLED)
+	if(TIMER2_STATE == TIMER_ENABLED)
 	{
 		/*---------------------------initialize the timer0 mode---------------------------*/
 
@@ -949,7 +949,7 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 		case TIMER1A:
 			if(TIMER1_MODE == TIMER_MODE_FASTPWM)
 			{
-				if(TIMER1_FASTPWM_STATE_A == ENABLED)
+				if(TIMER1_FASTPWM_STATE_A == TIMER_ENABLED)
 				{
 					if(TIMER1_FASTPWM_SELECTION_A == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 					{
@@ -964,7 +964,7 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			}
 			else if (TIMER1_MODE == TIMER_MODE_PWM)
 			{
-				if(TIMER1_PWM_STATE_A == ENABLED)
+				if(TIMER1_PWM_STATE_A == TIMER_ENABLED)
 				{
 					if(TIMER1_PWM_SELECTION_A == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 					{
@@ -981,7 +981,7 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 		case TIMER1B:
 			if(TIMER1_MODE == TIMER_MODE_FASTPWM)
 			{
-				if(TIMER1_FASTPWM_STATE_B == ENABLED){
+				if(TIMER1_FASTPWM_STATE_B == TIMER_ENABLED){
 					if(TIMER1_FASTPWM_SELECTION_B == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 					{
 						OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
@@ -995,7 +995,7 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			}
 			else if (TIMER1_MODE == TIMER_MODE_PWM)
 			{
-				if(TIMER1_PWM_STATE_B == ENABLED){
+				if(TIMER1_PWM_STATE_B == TIMER_ENABLED){
 					if(TIMER1_PWM_SELECTION_B == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 					{
 						OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
@@ -1400,7 +1400,7 @@ static void TIMER_VidSetTimer0OVFTime(f32 Copy_f32TimerCtr)
 		}
 		else /* float */
 		{
-			/* preload = 2^n(1-0.y) = 2^n - 0.y*2^n  --> 0.y = Copy_f32TimerCtr - (u32)Copy_f32TimerCtr */
+			// preload = 2^n(1-0.y) = 2^n - 0.y*2^n  // 0.y = Copy_f32TimerCtr - (u32)Copy_f32TimerCtr
 
 			Local_f32FractionCount = TIMER0_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);  // 2^n * 0.y
 
@@ -1503,6 +1503,7 @@ static void TIMER_VidSetTimer2OVFTime(f32 Copy_f32TimerCtr)
 
 static void TIMER_VidSetTIMER0CTCTime(f32 Copy_f32TimerCtr)
 {
+	//f32 Local_f32FractionCount;
 	if (Copy_f32TimerCtr == 1)
 	{
 		Global_u32ReqTimer0Cntr = 1;
@@ -1535,14 +1536,15 @@ static void TIMER_VidSetTIMER0CTCTime(f32 Copy_f32TimerCtr)
 
 static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 {
+	//f32 Local_f32FractionCount;
 	if (Copy_f32TimerCtr == 1)
 	{
 		Global_u32ReqTimer1Cntr = 1;
-		if (TIMER1_CTC_STATE_A == ENABLED)
+		if (TIMER1_CTC_STATE_A == TIMER_ENABLED)
 		{
 			OCR1A = 0xffff;
 		}
-		if (TIMER1_CTC_STATE_B == ENABLED)
+		if (TIMER1_CTC_STATE_B == TIMER_ENABLED)
 		{
 			OCR1B = 0xffff;
 		}
@@ -1553,11 +1555,11 @@ static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 		if (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr == 0) /* integer */
 		{
 			Global_u32ReqTimer1Cntr = (u32)Copy_f32TimerCtr;
-			if (TIMER1_CTC_STATE_A == ENABLED)
+			if (TIMER1_CTC_STATE_A == TIMER_ENABLED)
 			{
 				OCR1A = 0xffff;
 			}
-			if (TIMER1_CTC_STATE_B == ENABLED)
+			if (TIMER1_CTC_STATE_B == TIMER_ENABLED)
 			{
 				OCR1B = 0xffff;
 			}
@@ -1568,11 +1570,11 @@ static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 			Global_f32Timer1CTCVal = (f32)TIMER1_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);
 			Global_u32ReqTimer1Cntr = (u32)Copy_f32TimerCtr + 1;
 
-			if (TIMER1_CTC_STATE_A == ENABLED)
+			if (TIMER1_CTC_STATE_A == TIMER_ENABLED)
 			{
 				OCR1A = Global_f32Timer1CTCVal;
 			}
-			if (TIMER1_CTC_STATE_B == ENABLED)
+			if (TIMER1_CTC_STATE_B == TIMER_ENABLED)
 			{
 				OCR1B = Global_f32Timer1CTCVal;
 			}
@@ -1581,12 +1583,13 @@ static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 	}
 	else if (Copy_f32TimerCtr < 1)
 	{
+		//Local_f32FractionCount = TIMER1_MAX * Copy_f32TimerCtr;
 		Global_u32ReqTimer1Cntr = 1;
-		if (TIMER1_CTC_STATE_A == ENABLED)
+		if (TIMER1_CTC_STATE_A == TIMER_ENABLED)
 		{
 			OCR1A =	(TIMER1_MAX * Copy_f32TimerCtr);
 		}
-		if (TIMER1_CTC_STATE_B == ENABLED)
+		if (TIMER1_CTC_STATE_B == TIMER_ENABLED)
 		{
 			OCR1B = (TIMER1_MAX * Copy_f32TimerCtr);
 		}

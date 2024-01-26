@@ -25,7 +25,9 @@
 
 #define TCNT0			*((volatile u8*)0x52)		/*Timer/Counter0 (8 Bits)*/
 
+
 #define OCR0			*((volatile u8*)0x5c)		/* Output compare register */
+
 
 #define TIMSK			*((volatile u8*)0x59)		/* Timer mask */
 #define TIMSK_OCIE0		1							/* Timer/Counter0 Output Compare Match Interrupt Enable */
@@ -45,6 +47,7 @@
 #define TCCR1A_COM1A0	6							/*Compare Output Mode for Compare unit A */
 #define TCCR1A_COM1A1	7							/*Compare Output Mode for Compare unit A */
 
+
 #define TCCR1B			*((volatile u8*)0x4e)		/*Timer/Counter1 Control Register B*/
 #define TCCR1B_CS10		0                           /* Prescaler bit 0 */
 #define TCCR1B_CS11		1                           /* Prescaler bit 1 */
@@ -54,10 +57,12 @@
 #define TCCR1B_ICES1	6							/*  Input Capture Edge Select */
 #define TCCR1B_ICNC1	7							/*  Input Capture Noise Canceler */
 
+
 #define TIMSK_TOIE1		2							/* Timer/Counter1, Input Capture Interrupt Enable */
 #define TIMSK_OCIE1B	3                           /* Timer/Counter1, Timer/Counter1, Output Compare B Match Interrupt Enable */
 #define TIMSK_OCIE1A	4                           /* Timer/Counter1, Timer/Counter1, Output Compare A Match Interrupt Enable*/
 #define TIMSK_TICIE1	5                           /* Timer/Counter1, Overflow Interrupt Enable */
+
 
 #define TCNT1			*((volatile u16*)0x4c)
 
@@ -84,7 +89,9 @@
 
 #define TCNT2			*((volatile u8*)0x44)			/*Timer/Counter2 Control Register*/
 
+
 #define OCR2			*((volatile u8*)0x43)  			/* Output compare register */
+
 
 #define TIMSK_OCIE2		7								/* Timer/Counter2 Output Compare Match Interrupt Enable */
 #define TIMSK_TOIE2		6								/*Timer/Counter2 Overflow Interrupt Enable*/
@@ -147,11 +154,12 @@
 #define TIMER1_MAX		65536ULL
 #define TIMER2_MAX		256
 
-#define ENABLED			55
-#define DISABLED		76
+#define TIMER_ENABLED	55
+#define TIMER_DISABLED	76
 
 #define RISING_EDGE		21
 #define FALLING_EDGE	22
+
 
 
 /*============== Setting the Timer overflow according to the configured prescaler ==============*/
