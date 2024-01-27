@@ -24,9 +24,11 @@ the Hardware Abstraction Layer includes the following drivers:
 
 3-seven_segment
 
-4-LED
+4- LM35
 
-5-Switch
+5-LED
+
+6-Switch
 
 # SERVICE Layer
 the Service Layer includes the following libraries:
