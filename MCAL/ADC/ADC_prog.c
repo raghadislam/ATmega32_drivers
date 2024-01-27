@@ -11,24 +11,39 @@
 #include "../../SERVICE/STDTypes.h"
 #include "../../SERVICE/BIT_MATH.h"
 #include "../../SERVICE/errorState.h"
+#include "ADC_int.h"
 #include "ADC_priv.h"
 #include "ADC_config.h"
 
-/* pointer to the callback function which  which will run as ISR on ADC conversion complete */
-static void (*Global_pvCallBack)(void) = NULL;
+/* pointer to the callback function which will run as ISR on ADC conversion complete */
+static void (*Global_pvCallBack)(u16 x) = NULL;
 
 /* static variable to hold the ADC value pointer */
-static u16 *ADCValue = 0;
+static u16 *Global_pu16ADCValue = 0;
 
 /* Global flag for the ADC Busy State*/
 static u8 Global_u8ADCState = IDLE;
+
+/* Flag to indicate the interrupt source */
+static u8 Global_u8InterruptFlag = 0;
+
+/* Global variable to carry chain channels array */
+static u8* Global_pu8ChaniChannelArr = NULL;
+
+/* Global variable to carry chain results array */
+static u16* Global_pu16ChainResultsArr = NULL;
+
+/* Global variable to carry the chain size */
+static u8 Global_u8ChainSize;
+
+/* Global variable to carry the current chain conversion index */
+static u8 Global_u8ChainIndex = 0;
 
 
 /**
  * @brief initialization function
  * @return the Error state of the function
  */
-
 ES_t ADC_enuInit(){
 
 	ES_t Local_u8ErrorState = ES_OK;
@@ -65,7 +80,7 @@ ES_t ADC_enuInit(){
 
 	/*---------------------- specify the ADC Prescaler ----------------------*/
 
-#if (IS_VALID_PRESCALER(ADC_PRESCALER) )
+#if ( IS_VALID_PRESCALER(ADC_PRESCALER) )
 	ADCSRA &= PRESCALER_MASK;
 	ADCSRA |= ADC_PRESCALER;
 #else
@@ -122,15 +137,15 @@ ES_t ADC_enuInit(){
 	return Local_u8ErrorState;
 }
 
+
 /**
  * @brief Synchronous function to get the reading using busy waiting
- *
- * @param Copy_u8Channel: the selected ADC channel
- * @param Copy_pu16Reading: variable in which we return the reading
- *
+ 
+ * @param[in] Copy_u8Channel: the selected ADC channel
+ * @param[out] Copy_pu16Reading: variable in which we return the reading
+ 
  * @return the Error state of the function
  */
-
 ES_t ADC_enuBlockingRead(u8 Copy_u8Channel, u16* Copy_pu16Reading){
 
 	ES_t Local_u8ErrorState = ES_OK;
@@ -174,17 +189,16 @@ ES_t ADC_enuBlockingRead(u8 Copy_u8Channel, u16* Copy_pu16Reading){
 				 */
 				Set_bit(ADCSRA,ADCSRA_ADIF);
 
-				if (ADC_INTERRUPT_STATE == ADC_INT_ENABLED)
-				{
-					/* Re-enable ADC interrupt */
-					Set_bit(ADCSRA, ADCSRA_ADIE);
-				}
+#if (ADC_INTERRUPT_STATE == ADC_INT_ENABLED)
+				/* Re-enable ADC interrupt */
+				Set_bit(ADCSRA, ADCSRA_ADIE);
+#endif
 
 
-#if (ADC_ADJUST_RESULT == ADC_LEFT_ADJUST)
+#if (ADC_RESOLUTION == ADC_8BIT)
 				*Copy_pu16Reading = ADCH;
 
-#elif (ADC_ADJUST_RESULT == ADC_RIGHT_ADJUST)
+#elif (ADC_RESOLUTION == ADC_10BIT)
 				*Copy_pu16Reading = ADCVAL_10BITS;
 
 #else
@@ -207,16 +221,15 @@ ES_t ADC_enuBlockingRead(u8 Copy_u8Channel, u16* Copy_pu16Reading){
 
 /**
  * @brief Asynchronous function to get the reading without waiting by only starting the conversion
- *        and then execute the notification function as ISR on ADC conversion complete
+ * and then execute the notification function as ISR on ADC conversion complete
  *
- * @param Copy_u8Channel: the selected ADC channel
- * @param Copy_pu16Reading: variable in which we return the reading
- * @param Copy_pvNotficationFunc: the pointer to the callback function which will run as ISR on ADC conversion complete
+ * @param[in] Copy_u8Channel:   the selected ADC channel
+ * @param[out] Copy_pu16Reading: variable in which we return the reading
+ * @param[in] Copy_pvNotficationFunc: the pointer to the callback function which will run as ISR on ADC conversion complete
  *
  * @return the Error state of the function
  */
-
-ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Copy_pvNotficationFunc)(void))
+ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Copy_pvNotficationFunc)(u16 Copy_u16reading))
 {
 	ES_t Local_u8ErrorState = ES_OK;
 
@@ -225,18 +238,21 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 
 		if(Global_u8ADCState == IDLE)
 		{
+			/* set the interrupt source to single channel conversion */
+			Global_u8InterruptFlag = SINGLE_CHANNEL;
+
 			/* ADC is now Busy */
 			Global_u8ADCState = BUSY;
 
 			if (IS_VALID_CHANNEL(Copy_u8Channel))
 			{
 				/* Copy pointer to global variable for use in ISR */
-				ADCValue = Copy_pu16Reading;
+				Global_pu16ADCValue = Copy_pu16Reading;
 
 				/* assign address of the Call Back function in a global variable */
 				Global_pvCallBack = Copy_pvNotficationFunc;
 
-				/* Select the required channel by setting the four bits in ADMUX */
+				/* Select the required channel by setting the four LSBs in ADMUX */
 				ADMUX = (ADMUX & 0xF0) | (Copy_u8Channel);
 
 				/* Start Conversion by setting ADSC bit */
@@ -261,6 +277,59 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 }
 
 
+/**
+ * @brief function to read a chain of channels Asynchronously.
+ * @param[in] Copy_Chain: the struct object that holds all the chain data.
+ * @return the Error state of the function
+ */
+ES_t ADC_enuReadChain(Chain_t* Copy_Chain)
+{
+	ES_t Local_u8ErrorState = ES_OK;
+	if(Copy_Chain != NULL)
+	{
+		if(Global_u8ADCState == IDLE)
+		{
+			/* ADC is now Busy */
+			Global_u8ADCState = BUSY;
+
+			/* set the interrupt source to chain conversion */
+			Global_u8InterruptFlag = CHAIN_CONVERSION;
+
+			/* initialize Chain channel array */
+			Global_pu8ChaniChannelArr = Copy_Chain->Channels;
+
+			/* initialize Chain result array */
+			Global_pu16ChainResultsArr = Copy_Chain->Results;
+
+			/* initialize Chain size */
+			Global_u8ChainSize = Copy_Chain->Size;
+
+			/* initialize Chain notfication function */
+			Global_pvCallBack = Copy_Chain->NotificationFunc;
+
+			/* initialize current conversion index */
+			Global_u8ChainIndex = 0;
+
+			/* set the required initial channel */
+			ADMUX = (ADMUX & 0xF0) | (Global_pu8ChaniChannelArr[Global_u8ChainIndex]);
+
+			/* Start Conversion by setting ADSC bit */
+			Set_bit(ADCSRA, ADCSRA_ADSC);
+
+			/* ADC Conversion Complete Interrupt Enable */
+			Set_bit(ADCSRA , ADCSRA_ADIE) ;
+
+		}
+		else Local_u8ErrorState = ES_BUSY_STATE;
+
+	}
+	else Local_u8ErrorState = ES_NULL_POINTER;
+
+
+	return Local_u8ErrorState;
+}
+
+
 
 /*========================== ADC ISR ==========================*/
 
@@ -268,20 +337,68 @@ ES_t ADC_enuReadNonBlocking(u8 Copy_u8Channel, u16* Copy_pu16Reading, void (*Cop
 void __vector_16(void) __attribute__((signal));
 void __vector_16(void)
 {
-	/* Read the ADC value from the ADC Data Register */
-	if (ADC_RESOLUTION == ADC_8BIT)
+	/* check  the interrupt source */
+	if (Global_u8InterruptFlag == SINGLE_CHANNEL)
 	{
-		ADCValue = ADCH;
-	}
-	else if (ADC_RESOLUTION == ADC_8BIT)
-	{
-		ADCValue = ADCVAL_10BITS;
-	}
+		/* Read the ADC value from the ADC Data Register */
+#if (ADC_RESOLUTION == ADC_8BIT)
+			*Global_pu16ADCValue = ADCH;
+#elif (ADC_RESOLUTION == ADC_8BIT)
+			*Global_pu16ADCValue = ADCVAL_10BITS;
+#else
+#error " Unsupported ADC resolution "
+#endif
 
-	/* Call the Callback function in the application after completion of the ADC conversion */
-	if (Global_pvCallBack != NULL)
+		/* Call the Callback function in the application after completion of the ADC conversion */
+		if (Global_pvCallBack != NULL)
+		{
+			//*Global_pu16ADCValue = ((u32)(*Global_pu16ADCValue)*5000ULL)/256ULL;
+			Global_pvCallBack(*Global_pu16ADCValue);
+		}
+
+		/* ADC is now IDLE */
+		Global_u8ADCState = IDLE;
+
+		/* disable ADC conversion complete interrupt*/
+		Clr_bit(ADCSRA , ADCSRA_ADIE);
+	}
+	else if(Global_u8InterruptFlag == CHAIN_CONVERSION)
 	{
-		Global_pvCallBack();
+		/* read current conversion */
+#if (ADC_RESOLUTION == ADC_8BIT)
+		Global_pu16ChainResultsArr[Global_u8ChainIndex] = ADCH;
+#elif (ADC_RESOLUTION == ADC_10BIT)
+		Global_pu16ChainResultsArr[Global_u8ChainIndex] = ADCVAL_10BITS;
+#else
+#error " Unsupported ADC resolution "
+#endif
+		/* increment chain index */
+		Global_u8ChainIndex++;
+
+		/* check if chain finished */
+		if(Global_u8ChainIndex == Global_u8ChainSize)
+		{
+			/* chain is finished */
+
+			/* ADC is now idle*/
+			Global_u8ADCState = IDLE;
+
+			/* call notificaion function */
+			Global_pvCallBack(Global_pu16ChainResultsArr[Global_u8ChainIndex]);
+
+			/* disable ADC conversion complete interrupt*/
+			Clr_bit(ADCSRA , ADCSRA_ADIE);
+		}
+		else
+		{
+			/* chain is not finished */
+
+			/* set the new required channel */
+			ADMUX = (ADMUX & 0xF0) | (Global_pu8ChaniChannelArr[Global_u8ChainIndex]);
+
+			/* Start Conversion by setting ADSC bit */
+			Set_bit(ADCSRA, ADCSRA_ADSC);
+		}
 	}
 }
 

@@ -8,45 +8,6 @@
 #ifndef ATMEGA32_CTOS_MCAL_ADC_ADC_PRIV_H_
 #define ATMEGA32_CTOS_MCAL_ADC_ADC_PRIV_H_
 
-/*======================= private macros ======================= */
-
-/* ADC reference voltage selection*/
-
-#define ADC_AREF	        88
-#define ADC_VCC		        99
-#define ADC_INTERNAL_VREF	11
-
-/*define the ADC right or left adjustment*/
-
-#define ADC_RIGHT_ADJUST    77
-#define ADC_LEFT_ADJUST	    66
-
-/* define the Enable/Disable state of the ADC peripheral, ADC interrupt and auto trigger */
-
-#define ADC_ENABLED		    55
-#define ADC_DISABLED	            34
-
-#define ADC_INT_ENABLED		    67
-#define ADC_INT_DISABLED            44
-
-#define ADC_AUTO_TRIGGER_ENABLED    58
-#define ADC_AUTO_TRIGGER_DISABLED   47
-
-/*ADC prescaler selection*/
-
-#define ADC_PRESCALER_2     0x0
-#define ADC_PRESCALER_4     0x2
-#define ADC_PRESCALER_8     0x3
-#define ADC_PRESCALER_16    0x4
-#define ADC_PRESCALER_32    0x5
-#define ADC_PRESCALER_64    0x6
-#define ADC_PRESCALER_128   0x7
-
-/*ADC resolution selection*/
-
-#define ADC_8BIT			5
-#define ADC_10BIT			7
-
 
 /*======================= ADC multiplexer selection register =======================*/
 
@@ -73,17 +34,21 @@
 
 
 /*ADC enable bit*/
-#define ADCSRA_ADEN 	    7
-/*ADC start conversion*/
-#define ADCSRA_ADSC         6
-/*ADC auto trigger enable*/
-#define ADCSRA_ADATE	    5
-/*ADC interrupt flag*/
-#define ADCSRA_ADIF	    4
-/*ADC interrupt enable*/
-#define ADCSRA_ADIE	    3
+#define ADCSRA_ADEN 		7
 
-/*ADC prescaler bits*/
+/* ADC start conversion */
+#define ADCSRA_ADSC 		6
+
+/* ADC auto trigger enable */
+#define ADCSRA_ADATE	    5
+
+/* ADC interrupt flag */
+#define ADCSRA_ADIF	        4
+
+/* ADC interrupt enable */
+#define ADCSRA_ADIE	        3
+
+/* ADC prescaler bits */
 #define ADCSRA_ADPS2        2
 #define ADCSRA_ADPS1        1
 #define ADCSRA_ADPS0        0
@@ -99,26 +64,66 @@
 
 
 /*ADC Auto Trigger Source bits*/
-#define ADC_FREE_RUNNING		0
+#define ADC_FREE_RUNNING			0
 #define ADC_ANALOG_COMPARATOR		1
-#define ADC_EXTI0			2
+#define ADC_EXTI0					2
 #define ADC_TIMER0_COMPARE_MATCH	3
-#define ADC_TIMER0_OVERFLOW		4
-#define ADC_TIMER1_COMPARE_MATCH_B n    5
-#define ADC_TIMER1_OVERFLOW		6
+#define ADC_TIMER0_OVERFLOW			4
+#define ADC_TIMER1_COMPARE_MATCH_B  5
+#define ADC_TIMER1_OVERFLOW			6
 #define ADC_TIMER1_CAPTURE_EVENT	7
 
 /* single conversion mode*/
-#define ADC_SINGLE_CONVERSION           71
+#define ADC_SINGLE_CONVERSION       71
 
 
 /*======================= ADCL and ADCH =======================*/
 
-#define ADCH 		        *((volatile u16*)0x25)
+#define ADCH 		        *((volatile u8*)0x25)
 
-#define ADCL 		        *((volatile u16*)0x24)
+#define ADCL 		        *((volatile u8*)0x24)
 
-#define ADCVAL_10BITS          *((volatile u16 *)(0x24))
+#define ADCVAL_10BITS       *((volatile u16 *)(0x24))
+
+
+/*======================= private macros ======================= */
+
+/* ADC reference voltage selection*/
+
+#define ADC_AREF		    88
+#define ADC_VCC		        99
+#define ADC_INTERNAL_VREF	11
+
+/*define the ADC right or left adjustment*/
+
+#define ADC_RIGHT_ADJUST    77
+#define ADC_LEFT_ADJUST	  	66
+
+/* define the Enable/Disable state of the ADC peripheral, ADC interrupt and auto trigger */
+
+#define ADC_ENABLED			55
+#define ADC_DISABLED	    34
+
+#define ADC_INT_ENABLED		67
+#define ADC_INT_DISABLED    44
+
+#define ADC_AUTO_TRIGGER_ENABLED		58
+#define ADC_AUTO_TRIGGER_DISABLED	    47
+
+/*ADC prescaler selection*/
+
+#define ADC_PRESCALER_2     0
+#define ADC_PRESCALER_4     2
+#define ADC_PRESCALER_8     3
+#define ADC_PRESCALER_16    4
+#define ADC_PRESCALER_32    5
+#define ADC_PRESCALER_64    6
+#define ADC_PRESCALER_128   7
+
+/*ADC resolution selection*/
+
+#define ADC_8BIT			5
+#define ADC_10BIT			7
 
 
 
@@ -158,11 +163,14 @@
 #define CLEAR_REGISTER_MASK 		 0b00000000
 
 
-#define LOW 			0
-#define HIGH			1
+#define LOW 				0
+#define HIGH				1
 
-#define IDLE                    9
-#define BUSY                    8
+#define IDLE 				9
+#define BUSY				8
+
+#define SINGLE_CHANNEL		32
+#define CHAIN_CONVERSION	66
 
 
 
