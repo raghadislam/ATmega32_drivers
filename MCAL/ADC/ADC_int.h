@@ -9,13 +9,12 @@
 #define ATMEGA32_CTOS_MCAL_ADC_ADC_INT_H_
 
 /* struct for parameters needed in the chain conversion */
-
 typedef struct
 {
-	u8*  Channels ;					/* array of the desired channels to read */
-	u16* Results;					/* array of the the results (ADC readings) */
-	u8 	 Size ;						/* number of channels in the chain */
-	void (*NotificationFunc)(u16 x);	/* notfication funcion to be excuted in the end of the chain conversion */
+	u8*  Channels ;									/* array of the desired channels to read */
+	u16* Results;									/* array of the the results (ADC readings) */
+	u8 	 Size ;										/* number of channels in the chain */
+	void (*NotificationFunc)(u16 Copy_u16Reading);	/* notfication funcion to be excuted in the end of the chain conversion */
 }Chain_t;
 
 
