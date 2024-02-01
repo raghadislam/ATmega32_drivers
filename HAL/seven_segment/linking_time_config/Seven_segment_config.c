@@ -6,10 +6,10 @@
  */
 
 
-#include "../../SERVICE/errorState.h"
-#include "../../SERVICE/STDTypes.h"
+#include "../../../SERVICE/errorState.h"
+#include "../../../SERVICE/STDTypes.h"
 
-#include "../../MCAL/DIO/DIO_int.h"
+#include "../../../MCAL/DIO/DIO_int.h"
 
 #include "Seven_segment_config.h"
 #include "Seven_segment_priv.h"
