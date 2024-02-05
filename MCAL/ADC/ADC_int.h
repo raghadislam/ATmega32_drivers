@@ -64,16 +64,16 @@ ES_t ADC_enuReadChain(Chain_t* Copy_Chain);
 
 /* Single ended input channels */
 
-#define ADC_SINGLE_ENDED_ADC0		0x0
-#define ADC_SINGLE_ENDED_ADC1		0x1
-#define ADC_SINGLE_ENDED_ADC2		0x2
+#define ADC_SINGLE_ENDED_ADC0	    0x0
+#define ADC_SINGLE_ENDED_ADC1	    0x1
+#define ADC_SINGLE_ENDED_ADC2	    0x2
 #define ADC_SINGLE_ENDED_ADC3       0x3
 #define ADC_SINGLE_ENDED_ADC4       0x4
 #define ADC_SINGLE_ENDED_ADC5       0x5
 #define ADC_SINGLE_ENDED_ADC6       0x6
 #define ADC_SINGLE_ENDED_ADC7       0x7
-#define V_BG					    0x1E
-#define GND					     	0x1F
+#define V_BG			    0x1E
+#define GND			    0x1F
 
 
 /* differential channels *Positive_negative_gain* */
@@ -83,9 +83,9 @@ ES_t ADC_enuReadChain(Chain_t* Copy_Chain);
 #define ADC0_ADC0_X200		0xA
 #define ADC1_ADC0_X200  	0xB
 #define ADC2_ADC2_X10  		0xC
-#define ADC3_ADC2_X10 	    0xD
-#define ADC2_ADC2_X200      0xE
-#define ADC3_ADC2_X200      0xF
+#define ADC3_ADC2_X10 	        0xD
+#define ADC2_ADC2_X200          0xE
+#define ADC3_ADC2_X200          0xF
 #define ADC0_ADC1	        0x10
 #define ADC1_ADC1	        0x11
 #define ADC2_ADC1	        0x12
