@@ -17,6 +17,9 @@ the Microcontroller Abstraction Layer includes the following drivers:
 
 7-USART
 
+8-SPI
+
+
 # HAL Layer
 the Hardware Abstraction Layer includes the following drivers:
 
