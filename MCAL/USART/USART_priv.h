@@ -23,8 +23,8 @@
 #define USART_SYNCH				11
 
 /* Speed mode options */
-#define USART_NORMAL_MODE    	19
-#define USART_DBL_SPEED_MODE 	20
+#define USART_NORMAL_MODE    	1
+#define USART_DBL_SPEED_MODE 	2
 
 /* State options */
 #define USART_ENABLE			33
@@ -131,6 +131,9 @@
 #define UBRRL *((volatile u8 *)(0x29))
 #define UBRRH *((volatile u8 *)(0x40))
 
+
+#define UBRR_VAL		(((SYSTEM_CLK / (USART_BAUD_RATE * 16ULL))) - 1ULL)
+#define UBRR_DBL_VAL	(((SYSTEM_CLK / (USART_BAUD_RATE * 8ULL))) - 1ULL)
 
 
 #endif /* ATMEGA32_CTOS_MCAL_USART_USART_PRIV_H_ */

@@ -35,27 +35,6 @@ ES_t USART_enuInit()
 	ES_t Local_enuErrorState = ES_OK;
 	u8 Local_u8UCSRCval = 0;
 
-	/* set the USART Transmission Speed */
-
-#if (USART_MODE == USART_NORMAL_MODE)
-
-	/* Setting the baud rate */
-	UBRRL = UBRR_VAL;
-	UBRRH = (UBRR_VAL >> 8);
-
-#elif USART_MODE == USART_DBL_SPEED_MODE
-
-	/* Setting the U2X bit to enable double speed mode */
-	Set_bit(UCSRA,UCSRA_U2X);
-
-	/* Setting the baud rate */
-	UBRRL = UBRR_DBL_VAL;
-	UBRRH = (UBRR_DBL_VAL >> 8);
-#else
-#error "USART error : unsupported mode"
-#endif
-
-
 	/* check if the transmitter is enabled */
 	if(USART_TX_STATE == USART_ENABLE)
 	{
@@ -111,41 +90,6 @@ ES_t USART_enuInit()
 	}
 	else Local_enuErrorState = ES_NOK;
 
-
-
-
-
-
-
-
-	//	/* Checking the parity type */
-	//	if (USART_PARITY == USART_EVEN_PARITY)
-	//	{
-	//		UCSRC = (1 << UCSRC_URSEL) | (1 << UCSRC_UPM1) ;
-	////		Set_bit(UCSRC, UCSRC_UPM1);
-	////		Clr_bit(UCSRC, UCSRC_UPM0);
-	//	}
-	//
-	//	else if (USART_PARITY == USART_ODD_PARITY)
-	//	{
-	//		UCSRC = (1 << UCSRC_URSEL) | (1 << UCSRC_UPM1) | (1 << UCSRC_UPM0);
-	//		Set_bit(UCSRC, UCSRC_UPM1);
-	//		Set_bit(UCSRC, UCSRC_UPM0);
-	//	}
-	//
-	//	else if (USART_PARITY == USART_NO_PARITY)
-	//	{
-	//		UCSRC = (1 << UCSRC_URSEL);
-	//	}
-	//	else Local_enuErrorState = ES_NOK;
-
-
-
-
-
-
-
-
 	/* Checking the USART Synchronization Mode */
 	if(USART_SYNCHRONIZATION == USART_SYNCH)
 	{
@@ -199,9 +143,28 @@ ES_t USART_enuInit()
 		break;
 	default: Local_enuErrorState = ES_NOK;
 	}
-
 	/* srtting the UCSRC register value */
 	UCSRC = Local_u8UCSRCval;
+
+	/* set the USART Transmission Speed */
+
+#if (USART_MODE == USART_NORMAL_MODE)
+
+	/* Setting the baud rate */
+	UBRRL = UBRR_VAL;
+	UBRRH = (UBRR_VAL >> 8);
+
+#elif USART_MODE == USART_DBL_SPEED_MODE
+
+	/* Setting the U2X bit to enable double speed mode */
+	Set_bit(UCSRA,UCSRA_U2X);
+
+	/* Setting the baud rate */
+	UBRRL = UBRR_DBL_VAL;
+	UBRRH = (UBRR_DBL_VAL >> 8);
+#else
+#error "USART error : unsupported mode"
+#endif
 
 	return Local_enuErrorState;
 }
@@ -214,7 +177,7 @@ ES_t USART_enuSendData(u8 Copy_u8Data)
 	u32 Local_u32TimeOut = 0;
 
 	/* wait until transmit buffer is empty */
-	while(Get_bit(UCSRA,UCSRA_UDRE)==0 && Local_u32TimeOut < USART_TIMEOUT)
+	while((Get_bit(UCSRA,UCSRA_UDRE) == 0) && (Local_u32TimeOut < USART_TIMEOUT))
 	{
 		Local_u32TimeOut++;
 	}
@@ -242,7 +205,7 @@ ES_t USART_enuReceiveData(u8* Copy_pu8Data)
 	if(Copy_pu8Data != NULL)
 	{
 		/* Wait for data to be received */
-		while(Get_bit(UCSRA,UCSRA_RXC) == 0 && Local_u32TimeOut < USART_TIMEOUT)
+		while((Get_bit(UCSRA,UCSRA_RXC) == 0) && (Local_u32TimeOut < USART_TIMEOUT))
 		{
 			Local_u32TimeOut++;
 		}
@@ -264,7 +227,7 @@ ES_t USART_enuReceiveData(u8* Copy_pu8Data)
 
 
 
-ES_t USART_enuSendStringSynch(u8* Copy_u16String)
+ES_t USART_enuSendStringSynch(const u8* Copy_u16String)
 {
 	ES_t Local_enuErrorState = ES_OK;
 
@@ -307,16 +270,19 @@ ES_t USART_enuReceiveStringSynch(u8* Copy_u16String)
 {
 	ES_t Local_enuErrorState = ES_OK;
 
-	/* Local variable for applying the Timeout mechanism */
+	/* Local variables */
 	u32 Local_u32TimeOut=0;
 	u8 Local_u8Iterator = 0;
+	char Local_u8Data = 0;
+
 
 	if(Copy_u16String != NULL)
 	{
-		while(Copy_u16String[Local_u8Iterator] != '\r')
+
+		while(1)
 		{
 			/* Wait for data to be received */
-			while(Get_bit(UCSRA,UCSRA_RXC) == 0 && Local_u32TimeOut < USART_TIMEOUT)
+			while((Get_bit(UCSRA,UCSRA_RXC) == 0) && (Local_u32TimeOut < USART_TIMEOUT))
 			{
 				Local_u32TimeOut++;
 			}
@@ -324,19 +290,26 @@ ES_t USART_enuReceiveStringSynch(u8* Copy_u16String)
 			if(Local_u32TimeOut < USART_TIMEOUT)
 			{
 				/* Get and return received data from buffer */
-				Copy_u16String[Local_u8Iterator] = UDR;
+				Local_u8Data = UDR;
 			}
-			else {
+			else
+			{
 				Local_enuErrorState = ES_TIME_OUT;
 				break;
 			}
+			if(( Local_u8Data == '\n'))
+			{
+				/* put the end of the string */
+				Copy_u16String[Local_u8Iterator] = '\0';
+				break;
+			}
+			else {
+				Copy_u16String[Local_u8Iterator] = Local_u8Data;
 
-			/* increment the iterator */
-			Local_u8Iterator++;
+				/* increment the iterator */
+				Local_u8Iterator++;
+			}
 		}
-
-		/* put the end of the string */
-		Copy_u16String[Local_u8Iterator] = '\0';
 	}
 	else Local_enuErrorState = ES_NULL_POINTER;
 
@@ -385,7 +358,7 @@ ES_t USART_enuReceiveStringAsynch(u8* Copy_u16String, void (*NotificationFunc)(v
 		/* reset the global string index */
 		USART_u8Index2 = 0;
 
-		/*check the Receive Complete Interrupt state */
+		/*enable the Receive Complete Interrupt state */
 		Set_bit(UCSRB,UCSRB_RXCIE);
 	}
 	else Local_enuErrorState = ES_NULL_POINTER;
@@ -397,17 +370,17 @@ ES_t USART_enuReceiveStringAsynch(u8* Copy_u16String, void (*NotificationFunc)(v
 void __vector_13 (void) __attribute__((signal));
 void __vector_13 (void){
 
-	/* check if the stribg ended */
-	if(USART_Pu8ReceivedString[USART_u8Index2] != '\r')
-	{
-		/* Put the current character into buffer */
-		UDR = USART_Pu8TransmittedString[USART_u8Index2];
+	USART_Pu8ReceivedString[USART_u8Index2] = UDR;
 
+	/* check if the string ended */
+	if(USART_Pu8ReceivedString[USART_u8Index2] != '\n')
+	{
 		/* point to the next character */
 		USART_u8Index2++;
 	}
 	else
 	{
+
 		/* Disable the Receive Complete interrupt */
 		Clr_bit(UCSRB,UCSRB_RXCIE);
 
@@ -415,7 +388,9 @@ void __vector_13 (void){
 		USART_u8Index2 = 0;
 
 		/* terminate the string */
-		USART_Pu8TransmittedString[USART_u8Index2] = '\0';
+		USART_Pu8ReceivedString[USART_u8Index2] = '\0';
+
+		USART_enuSendStringSynch(USART_Pu8ReceivedString);
 
 		/* execute the Notification function */
 		USART_ASychReceiveCallback();

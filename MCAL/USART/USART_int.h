@@ -42,7 +42,7 @@ ES_t USART_enuReceiveData(u8* Copy_pu8Data);
  *
  * @return Error statues
  */
-ES_t USART_enuSendStringSynch(u8* Copy_u16String);
+ES_t USART_enuSendStringSynch(const u8* Copy_u16String);
 
 
 /*
