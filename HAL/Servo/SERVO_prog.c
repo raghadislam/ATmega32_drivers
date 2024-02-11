@@ -46,24 +46,29 @@ ES_t SERVO_enuSetLimitAngle(u8 Copy_u8Angle)
 	u16 Local_u8ONTime = 0;
 	u16 Local_u8Duty = 0;
 
-	/* Convert from the angle to on time */
-	Local_u8ONTime = map(Copy_u8Angle,0,180,1000,2000);
+	if((Copy_u8Angle >= 0) && (Copy_u8Angle <= 180))
+	{
+		Local_enuErrorState = ES_OK;
+		/* Convert from the angle to on time */
+		Local_u8ONTime = map(Copy_u8Angle,0,180,1000,2000);
 
-	/* Calculate the duty cycle */
-	Local_u8Duty = (100ULL * Local_u8ONTime) / 20000ULL;
+		/* Calculate the duty cycle */
+		Local_u8Duty = (100ULL * Local_u8ONTime) / 20000ULL;
 
-	/* set the duty cycle */
+		/* set the duty cycle */
 #if(SERVO_PIN == SERVO_OC1A)
 
-	OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+		OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
 
 #elif(SERVO_PIN == SERVO_OC1B)
 
-	OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+		OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
 
 #else
 #error "wrong servo pin"
 #endif
+	}
+	else Local_enuErrorState = ES_OUT_OF_RANGE;
 
 	return Local_enuErrorState;
 }
@@ -74,30 +79,35 @@ ES_t SERVO_enuSetLimitAngle(u8 Copy_u8Angle)
  * @param[in] Copy_u8Speed: the desired speed
  * @return error state
  */
-ES_t SERVO_enuSetContSpeed(u8 Copy_u8Speed)
+ES_t SERVO_enuSetContSpeed(s8 Copy_u8Speed)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	u8 Local_u8ONTime = 0;
 	u8 Local_u8Duty = 0;
 
-	/* Convert from the angle to on time */
-	Local_u8ONTime = map(Copy_u8Speed,-100,100,750,2500);
+	if(Copy_u8Speed >= -100 && Copy_u8Speed <=100)
+	{
+		Local_enuErrorState = ES_OK;
+		/* Convert from the angle to on time */
+		Local_u8ONTime = map(Copy_u8Speed,-100,100,750,2500);
 
-	/* Calculate the duty cycle */
-	Local_u8Duty = (100ULL * Local_u8ONTime)/ 20000ULL;
+		/* Calculate the duty cycle */
+		Local_u8Duty = (100ULL * Local_u8ONTime)/ 20000ULL;
 
-	/* set the duty cycle */
+		/* set the duty cycle */
 #if(SERVO_PIN == SERVO_OC1A)
 
-	OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+		OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
 
 #elif(SERVO_PIN == SERVO_OC1B)
 
-	OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+		OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
 
 #else
 #error "wrong servo pin"
 #endif
+	}
+	else Local_enuErrorState = ES_OUT_OF_RANGE;
 	return Local_enuErrorState;
 }
 
@@ -106,5 +116,5 @@ ES_t SERVO_enuSetContSpeed(u8 Copy_u8Speed)
 
 static long long map(long long val, long long in_min, long long in_max, long long out_min, long long out_max)
 {
-  return ((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+	return ((val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
 }

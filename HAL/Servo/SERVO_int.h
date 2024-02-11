@@ -32,7 +32,7 @@ ES_t SERVO_enuSetLimitAngle(u8 Copy_u8Angle);
  *
  * @return error state
  */
-ES_t SERVO_enuSetContSpeed(u8 Copy_u8Speed);
+ES_t SERVO_enuSetContSpeed(s8 Copy_u8Speed);
 
 
 
