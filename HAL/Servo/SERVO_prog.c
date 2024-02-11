@@ -15,7 +15,7 @@
 #include "SERVO_priv.h"
 #include "SERVO_config.h"
 
-
+/* global variable to hold the period value needed for the servo motor */
 u16 Global_u16PeriodTime = 0;
 
 
@@ -54,9 +54,13 @@ ES_t SERVO_enuSetLimitAngle(u8 Copy_u8Angle)
 
 	/* set the duty cycle */
 #if(SERVO_PIN == SERVO_OC1A)
+
 	OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+
 #elif(SERVO_PIN == SERVO_OC1B)
+
 	OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+
 #else
 #error "wrong servo pin"
 #endif
@@ -84,9 +88,13 @@ ES_t SERVO_enuSetContSpeed(u8 Copy_u8Speed)
 
 	/* set the duty cycle */
 #if(SERVO_PIN == SERVO_OC1A)
+
 	OCR1A = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+
 #elif(SERVO_PIN == SERVO_OC1B)
+
 	OCR1B = ((Local_u8Duty * (Global_u16PeriodTime - 1ULL)) / 100ULL);
+
 #else
 #error "wrong servo pin"
 #endif
