@@ -8,9 +8,6 @@
 #ifndef ATMEGA32_CTOS_MCAL_USART_USART_CONFIG_H_
 #define ATMEGA32_CTOS_MCAL_USART_USART_CONFIG_H_
 
-/* define the system clock frequency */
-#define SYSTEM_CLK					8000000ULL
-
 /* define the desired baud rate */
 #define USART_BAUD_RATE				9600ULL
 

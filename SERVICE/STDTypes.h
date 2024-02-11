@@ -16,6 +16,8 @@ typedef signed long long s64;
 
 #define NULL (void*)0
 
+#define SYSTEM_CLK		8000000ULL
+
 
 
 #endif /* STDTYPE_H_ */

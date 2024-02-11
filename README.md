@@ -31,11 +31,13 @@ the Hardware Abstraction Layer includes the following drivers:
 
 4- LM35
 
-5- DC motor
+5- Servo motor
 
-6-LED
+6- DC motor
 
-7-Switch
+7-LED
+
+8-Switch
 
 # SERVICE Layer
 the Service Layer includes the following libraries:
