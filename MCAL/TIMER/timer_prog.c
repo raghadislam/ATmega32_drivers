@@ -925,11 +925,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			{
 				if(TIMER0_FASTPWM_SELECTION == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 				{
-					OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX - 1)) / 100) ;
+					if(Copy_u8DutyCycle == 100)
+					{
+						OCR0 = 255;
+					}
+					else
+						OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX)) / 100ULL) ; // momken akteb de bas mn 3'er el shart lw msh hasta5dem el timer 3shan awafar
 				}
 				else if(TIMER0_FASTPWM_SELECTION == SET_ON_COMP_CLEAR_ON_TOP) /* inverted */
 				{
-					OCR0 = ((TIMER0_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+					if(Copy_u8DutyCycle == 0)
+					{
+						OCR0 = 255;
+					}
+					else
+						OCR0 = ((TIMER0_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 				}
 				else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 			}
@@ -937,11 +947,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			{
 				if(TIMER0_PWM_SELECTION == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 				{
-					OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX - 1)) / 100) ;
+					if(Copy_u8DutyCycle == 100)
+					{
+						OCR0 = 255;
+					}
+					else
+						OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX)) / 100ULL) ;
 				}
 				else if(TIMER0_PWM_SELECTION == SET_ON_UP_CLEAR_ON_DOWN) /* inverted */
 				{
-					OCR0 = ((TIMER0_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+					if(Copy_u8DutyCycle == 0)
+					{
+						OCR0 = 255;
+					}
+					else
+						OCR0 = ((TIMER0_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 				}
 				else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 			}
@@ -953,11 +973,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 				{
 					if(TIMER1_FASTPWM_SELECTION_A == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 					{
-						OCR1A = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
+						if(Copy_u8DutyCycle == 100)
+						{
+							OCR1A = 65535;
+						}
+						else
+							OCR1A = ((Copy_u8DutyCycle * (TIMER1_MAX)) / 100) ;
 					}
 					else if(TIMER1_FASTPWM_SELECTION_A == SET_ON_COMP_CLEAR_ON_TOP) /* inverted */
 					{
-						OCR1A = ((TIMER1_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+						if(Copy_u8DutyCycle == 0)
+						{
+							OCR1A = 65535;
+						}
+						else
+							OCR1A = ((TIMER1_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 					}
 					else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 				}
@@ -968,11 +998,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 				{
 					if(TIMER1_PWM_SELECTION_A == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 					{
-						OCR1A = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
+						if(Copy_u8DutyCycle == 100)
+						{
+							OCR1A = 65535;
+						}
+						else
+							OCR1A = ((Copy_u8DutyCycle * (TIMER1_MAX)) / 100) ;
 					}
 					else if(TIMER1_PWM_SELECTION_A == SET_ON_UP_CLEAR_ON_DOWN) /* inverted */
 					{
-						OCR1A = ((TIMER1_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+						if(Copy_u8DutyCycle == 0)
+						{
+							OCR1A = 65535;
+						}
+						else
+							OCR1A = ((TIMER1_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 					}
 					else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 				}
@@ -984,11 +1024,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 				if(TIMER1_FASTPWM_STATE_B == TIMER_ENABLED){
 					if(TIMER1_FASTPWM_SELECTION_B == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 					{
-						OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
+						if(Copy_u8DutyCycle == 100)
+						{
+							OCR1B = 65535;
+						}
+						else
+							OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX)) / 100) ;
 					}
 					else if(TIMER1_FASTPWM_SELECTION_B == SET_ON_COMP_CLEAR_ON_TOP) /* inverted */
 					{
-						OCR1B = ((TIMER1_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+						if(Copy_u8DutyCycle == 0)
+						{
+							OCR1B = 65535;
+						}
+						else
+							OCR1B = ((TIMER1_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 					}
 					else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 				}
@@ -998,11 +1048,21 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 				if(TIMER1_PWM_STATE_B == TIMER_ENABLED){
 					if(TIMER1_PWM_SELECTION_B == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 					{
-						OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX - 1)) / 100) ;
+						if(Copy_u8DutyCycle == 100)
+						{
+							OCR1B = 65535;
+						}
+						else
+							OCR1B = ((Copy_u8DutyCycle * (TIMER1_MAX)) / 100) ;
 					}
 					else if(TIMER1_PWM_SELECTION_B == SET_ON_UP_CLEAR_ON_DOWN) /* inverted */
 					{
-						OCR1B = ((TIMER1_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+						if(Copy_u8DutyCycle == 0)
+						{
+							OCR1B = 65535;
+						}
+						else
+							OCR1B = ((TIMER1_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 					}
 					else Local_enuErrorState = ES_UNSUPPORTED_MODE;
 				}
@@ -1013,25 +1073,47 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			{
 				if(TIMER2_FASTPWM_SELECTION == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 				{
-					OCR2 = ((Copy_u8DutyCycle * (TIMER2_MAX - 1)) / 100) ;
+					if(Copy_u8DutyCycle == 100)
+					{
+						OCR2 = 255;
+					}
+					else
+						OCR2 = ((Copy_u8DutyCycle * (TIMER2_MAX)) / 100) ;
 				}
 				else if(TIMER2_FASTPWM_SELECTION == SET_ON_COMP_CLEAR_ON_TOP) /* inverted */
 				{
-					OCR2 = ((TIMER2_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+					if(Copy_u8DutyCycle == 0)
+					{
+						OCR2 = 255;
+					}
+					else
+						OCR2 = ((TIMER2_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 				}
 			}
 			else if (TIMER2_MODE == TIMER_MODE_PWM)
 			{
 				if(TIMER2_PWM_SELECTION == CLEAR_ON_UP_SET_ON_DOWN)     /* non-inverted */
 				{
-					OCR2 = ((Copy_u8DutyCycle * (TIMER2_MAX - 1)) / 100) ;
+					if(Copy_u8DutyCycle == 100)
+					{
+						OCR2 = 255;
+					}
+					else
+						OCR2 = ((Copy_u8DutyCycle * (TIMER2_MAX)) / 100) ;
 				}
 				else if(TIMER2_PWM_SELECTION == SET_ON_UP_CLEAR_ON_DOWN) /* inverted */
 				{
-					OCR2 = ((TIMER2_MAX - 1) * (100 - Copy_u8DutyCycle)) / 100 ;
+					if(Copy_u8DutyCycle == 0)
+					{
+						OCR2 = 255;
+					}
+					else
+						OCR2 = ((TIMER2_MAX) * (100 - Copy_u8DutyCycle)) / 100 ;
 				}
 			}
 			break;
+		default: Local_enuErrorState = ES_WRONG_TYPE;
+
 		}
 	}
 	else Local_enuErrorState = ES_OUT_OF_RANGE;
@@ -1521,7 +1603,7 @@ static void TIMER_VidSetTIMER0CTCTime(f32 Copy_f32TimerCtr)
 		else /* float */
 		{
 			Global_f32Timer0CTCVal = TIMER0_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);
-			Global_u32ReqTimer0Cntr = (u32)Copy_f32TimerCtr + 1;
+			Global_u32ReqTimer0Cntr = (u32)Copy_f32TimerCtr + 2;
 			OCR0 = Global_f32Timer0CTCVal;
 			Global_u8Timer0CTCFlag = 1;
 		}
@@ -1568,7 +1650,7 @@ static void TIMER_VidSetTIMER1CTCTime(f32 Copy_f32TimerCtr)
 		else /* float */
 		{
 			Global_f32Timer1CTCVal = (f32)TIMER1_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);
-			Global_u32ReqTimer1Cntr = (u32)Copy_f32TimerCtr + 1;
+			Global_u32ReqTimer1Cntr = (u32)Copy_f32TimerCtr + 2;
 
 			if (TIMER1_CTC_STATE_A == TIMER_ENABLED)
 			{
@@ -1616,7 +1698,7 @@ static void TIMER_VidSetTIMER2CTCTime(f32 Copy_f32TimerCtr)
 		else /* float */
 		{
 			Global_f32Timer2CTCVal = TIMER2_MAX * (Copy_f32TimerCtr - (u32)Copy_f32TimerCtr);
-			Global_u32ReqTimer2Cntr = (u32)Copy_f32TimerCtr + 1;
+			Global_u32ReqTimer2Cntr = (u32)Copy_f32TimerCtr + 2;
 			OCR2 = Global_f32Timer2CTCVal;
 			Global_u8Timer2CTCFlag = 1 ;
 		}
