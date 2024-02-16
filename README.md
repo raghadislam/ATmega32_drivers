@@ -29,17 +29,19 @@ the Hardware Abstraction Layer includes the following drivers:
 
 2-keypad
 
-3-seven_segment
+3- EEPROM
 
-4- LM35
+4-seven_segment
 
-5- Servo motor
+5- LM35
 
-6- DC motor
+6- Servo motor
 
-7-LED
+7- DC motor
 
-8-Switch
+8-LED
+
+9-Switch
 
 # SERVICE Layer
 the Service Layer includes the following libraries:
