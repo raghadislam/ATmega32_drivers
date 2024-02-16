@@ -19,6 +19,8 @@ the Microcontroller Abstraction Layer includes the following drivers:
 
 8-SPI
 
+9-TWI
+
 
 # HAL Layer
 the Hardware Abstraction Layer includes the following drivers:
