@@ -17,13 +17,13 @@
 /**
  * @brief function to write one byte of data in the EEPROM.
  *
- * @param[in] Copy_u8Data: data to be written.
+ * @param[in] Copy_u16Address: address to be written in the EEPROM
  *
- * @param[in] Copy_u16Address : address to be written in the EEPROM
+ * @param[in] Copy_u8Data: data to be written.
  *
  * @return the error statues.
  */
-ES_t EEPROM_enuWriteByte(u8 Copy_u8Data, u16 Copy_u16Address)
+ES_t EEPROM_enuWriteByte(u16 Copy_u16Address, u8 Copy_u8Data)
 {
 	/* Local variable related the Error state */
 	ES_t Local_enuErrorState = ES_OK;
@@ -90,7 +90,7 @@ ES_t EEPROM_enuReadByte(u8 *Copy_Pu8Data, u16 Copy_u16Address)
 	Local_u64Check |= ((u64)TWI_enuSendSlaveAddressWithRead(EEPROM_ADDRESS) << 20);
 
 	/* read from the EEPROM chosen address*/
-	Local_u64Check |= ((u64)TWI_enuMasterReadByte(Copy_Pu8Data) << 25);
+	Local_u64Check |= ((u64)TWI_enuMasterReadByte(Copy_Pu8Data, TWI_NO_ACK) << 25);
 
 	/* Send stop condition */
 	Local_u64Check |= ((u64)TWI_enuSendStop() << 30);
