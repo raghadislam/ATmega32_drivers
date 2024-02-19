@@ -298,7 +298,6 @@ ES_t TIMER1_enuInit()
 			}
 
 		}
-		// to do : adjust the COM1A0/COM1A1/COM1B0/COM1B1 for the rest of the modes
 		else if(TIMER1_MODE == TIMER_MODE_PWM)
 		{
 			Set_bit(TCCR1A,TCCR1A_WGM10);
@@ -925,12 +924,13 @@ ES_t TIMER_enuSetDutyCycle(u8 Copy_u8TimerID, u8 Copy_u8DutyCycle)
 			{
 				if(TIMER0_FASTPWM_SELECTION == CLEAR_ON_COMP_SET_ON_TOP)     /* non-inverted */
 				{
+					/* condition to avoid putting 256 in 8 bit register (which will be represented as 0)*/
 					if(Copy_u8DutyCycle == 100)
 					{
 						OCR0 = 255;
 					}
 					else
-						OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX)) / 100ULL) ; // momken akteb de bas mn 3'er el shart lw msh hasta5dem el timer 3shan awafar
+						OCR0 = ((Copy_u8DutyCycle * (TIMER0_MAX)) / 100ULL) ;
 				}
 				else if(TIMER0_FASTPWM_SELECTION == SET_ON_COMP_CLEAR_ON_TOP) /* inverted */
 				{
