@@ -65,12 +65,12 @@ ES_t TWI_enuMasterInit(u8 Copy_u8Address)
 
 	/* Checking the state of the TWI Interrupt */
 #if TWI_INT_STATE == TWI_ENABLED
-		Set_bit(TWCR, TWCR_TWIE);
+	Set_bit(TWCR, TWCR_TWIE);
 #endif
 
 	/* Checking the state of the General Call recognition */
 #if TWI_GENERAL_CALL_STATE == TWI_ENABLED
-		Set_bit(TWAR, TWAR_TWGCE);
+	Set_bit(TWAR, TWAR_TWGCE);
 #endif
 
 
@@ -136,10 +136,10 @@ ES_t TWI_enuSendStart()
 	u32 Local_u32TimeOut = 0;
 
 	/* send start condition and clear the flag */
-	TWCR |= ((1<<TWCR_TWINT)|(1<<TWCR_TWSTA));
+	TWCR = (1 << TWCR_TWINT) | (1 << TWCR_TWSTA) | (1 << TWCR_TWEN); // Start condition
 
 	/* wait for the flag */
-	while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
+	while ((!(TWCR & (1 << TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
 	{
 		Local_u32TimeOut++;
 	}
@@ -155,11 +155,6 @@ ES_t TWI_enuSendStart()
 	{
 		Local_enuErrorState = ES_START_COND;
 	}
-	else
-	{
-		/* Clearing interrupt flag */
-		TWCR |= ((1<<TWCR_TWINT));
-	}
 
 	return Local_enuErrorState;
 }
@@ -174,11 +169,11 @@ ES_t TWI_enuSendRepeatedStart()
 	ES_t Local_enuErrorState = ES_OK;
 	u32 Local_u32TimeOut = 0;
 
-	/* send start condition and clear the flag */
-	TWCR |= ((1<<TWCR_TWINT)|(1<<TWCR_TWSTA));
+	/* send repeated start condition and clear the flag */
+	TWCR = (1 << TWCR_TWINT) | (1 << TWCR_TWSTA) | (1 << TWCR_TWEN); // Start condition
 
 	/* wait for the flag */
-	while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
+	while ((!(TWCR & (1 << TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
 	{
 		Local_u32TimeOut++;
 	}
@@ -193,11 +188,6 @@ ES_t TWI_enuSendRepeatedStart()
 	if(((TWSR & TWSR_STATUS_MASK) != REP_START_ACK) || Local_enuErrorState != ES_OK )
 	{
 		Local_enuErrorState = ES_REP_START_COND;
-	}
-	else
-	{
-		/* Clearing interrupt flag */
-		TWCR |= ((1<<TWCR_TWINT));
 	}
 
 	return Local_enuErrorState;
@@ -214,17 +204,14 @@ ES_t TWI_enuSendSlaveAddressWithWrite(u8 Copy_u8Address)
 	ES_t Local_enuErrorState = ES_OK;
 	u32 Local_u32TimeOut = 0;
 
-	/* clear start condition bit */
-	Clr_bit(TWCR,TWCR_TWSTA);
+	/* Set write request */
+	Clr_bit(Copy_u8Address,0);
 
 	/* Set the slave address in 7 MSBs th data register, 0Bit contains 0 as we need for write */
-	TWDR = (Copy_u8Address<<1);
-
-	/* set the write request (not needed just for readability) */
-	Clr_bit(TWDR,0);
+	TWDR = Copy_u8Address;
 
 	/* clear the flag to start the previous operation */
-	Set_bit(TWCR,TWCR_TWINT);
+	TWCR = (1<<TWCR_TWINT) | (1<<TWCR_TWEN);
 
 	/* wait for the flag */
 	while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
@@ -243,38 +230,29 @@ ES_t TWI_enuSendSlaveAddressWithWrite(u8 Copy_u8Address)
 	{
 		Local_enuErrorState = ES_SLAVE_ADD_WITH_WR;
 	}
-	else
-	{
-		/* Clearing interrupt flag */
-		TWCR |= ((1<<TWCR_TWINT));
-	}
-
 
 	return Local_enuErrorState;
 }
 
 
 /**
- * @brief function to send a a slave address with read request.
+ * @brief function to send a slave address with read request.
  * @param[in] Copy_u8Address: the slave's address.
  * @return the error statues.
  */
 ES_t TWI_enuSendSlaveAddressWithRead(u8 Copy_u8Address)
 {
 	ES_t Local_enuErrorState = ES_OK;
-	u32 Local_u32TimeOut =0;
+	u32 Local_u32TimeOut = 0;
 
-	/* clear start condition bit */
-	Clr_bit(TWCR,TWCR_TWSTA);
+	/* Set read request */
+	Set_bit(Copy_u8Address,0);
 
-	/* Set the slave address in 7 MSBs th data registere */
-	TWDR = (Copy_u8Address<<1);
-
-	/* set the read request */
-	Set_bit(TWDR,0);
+	/* Set the slave address in 7 MSBs th data register, 0Bit contains 1 as we need for read */
+	TWDR = Copy_u8Address;
 
 	/* clear the flag to start the previous operation */
-	Set_bit(TWCR,TWCR_TWINT);
+	TWCR = (1<<TWCR_TWINT) | (1<<TWCR_TWEN);
 
 	/* wait for the flag */
 	while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
@@ -292,11 +270,6 @@ ES_t TWI_enuSendSlaveAddressWithRead(u8 Copy_u8Address)
 	if(((TWSR & TWSR_STATUS_MASK) != SLAVE_ADD_AND_RD_ACK) || Local_enuErrorState != ES_OK )
 	{
 		Local_enuErrorState = ES_SLAVE_ADD_WITH_RD ;
-	}
-	else
-	{
-		/* Clearing interrupt flag */
-		TWCR |= ((1<<TWCR_TWINT));
 	}
 
 	return Local_enuErrorState;
@@ -317,7 +290,8 @@ ES_t TWI_enuMasterWriteByte(u8 Copy_u8Data)
 	TWDR = Copy_u8Data;
 
 	/* clear the flag to start the previous operation */
-	Set_bit(TWCR,TWCR_TWINT);
+	//	Set_bit(TWCR,TWCR_TWINT);
+	TWCR = (1 << TWCR_TWINT) | (1 << TWCR_TWEN);
 
 	/* wait for the flag */
 	while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
@@ -336,12 +310,6 @@ ES_t TWI_enuMasterWriteByte(u8 Copy_u8Data)
 	{
 		Local_enuErrorState = ES_MASTER_WR_BYTE ;
 	}
-	else
-	{
-		/* Clearing interrupt flag */
-		TWCR |= ((1<<TWCR_TWINT));
-	}
-
 
 	return Local_enuErrorState;
 }
@@ -350,9 +318,10 @@ ES_t TWI_enuMasterWriteByte(u8 Copy_u8Data)
 /**
  * @brief function to enable the master to read a byte of data.
  * @param[in] Copy_u8Data: the received data.
+ * @param[in] Copy_u8Ack: the acknowledge bit state.
  * @return the error statues.
  */
-ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data)
+ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data, u8 Copy_u8Ack)
 {
 	ES_t Local_enuErrorState = ES_OK;
 	u32 Local_u32TimeOut = 0;
@@ -360,8 +329,8 @@ ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data)
 
 	if(Copy_pu8Data != NULL){
 
-		/* clear the flag to start the receiving form the salve  */
-		Set_bit(TWCR,TWCR_TWINT);
+		/* clear the flag to start the receiving form the salve, set the acknowledge state  */
+		TWCR = (1 << TWCR_TWINT) | (Copy_u8Ack << TWCR_TWEA) | (1 << TWCR_TWEN);
 
 		/* wait for the flag */
 		while ((!(TWCR & (1<<TWCR_TWINT))) && Local_u32TimeOut < TWI_TIMEOUT)
@@ -375,13 +344,14 @@ ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data)
 			Local_enuErrorState = ES_TIME_OUT;
 		}
 
-		if(TWI_ACK_BIT_STATE == TWI_ENABLED)
+		/* check the ackmowledge state to know the right operation check state*/
+		if(Copy_u8Ack == TWI_NO_ACK)
 		{
-			Local_u8StatusCheck = MASTER_RD_BYTE_WITH_ACK;
+			Local_u8StatusCheck = MASTER_RD_BYTE_WITH_NACK;
 		}
 		else
 		{
-			Local_u8StatusCheck = MASTER_RD_BYTE_WITH_NACK;
+			Local_u8StatusCheck = MASTER_RD_BYTE_WITH_ACK;
 		}
 
 		/* check if  operation is completed successfully */
@@ -391,8 +361,6 @@ ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data)
 		}
 		else
 		{
-			/* Clearing interrupt flag */
-			TWCR |= ((1<<TWCR_TWINT));
 			/* write the data byte */
 			*Copy_pu8Data = TWDR ;
 		}
@@ -412,12 +380,17 @@ ES_t TWI_enuSendStop(void)
 	ES_t Local_enuErrorState = ES_OK;
 
 	/* Generate stop cindition on the bus */
-	Set_bit(TWCR,TWCR_TWSTO);
-
-	/* clear the flag to start the receiving form the salve  */
-	Set_bit(TWCR,TWCR_TWINT);
+	TWCR = (1 << TWCR_TWINT) | (1 << TWCR_TWSTO) | (1 << TWCR_TWEN);
 
 	return Local_enuErrorState;
 }
 
+
+/*========================== ISR ==========================*/
+
+void __vector_19 (void) __attribute__((signal));
+void __vector_19 (void)
+{
+
+}
 

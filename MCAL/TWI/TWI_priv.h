@@ -85,6 +85,10 @@
 
 #define TWI_NO_ADDRESS		8
 
+#define TWI_NO_ACK			0
+#define TWI_ACK				1
+
+
 
 
 #endif /* ATMEGA32_CTOS_MCAL_TWI_TWI_PRIV_H_ */

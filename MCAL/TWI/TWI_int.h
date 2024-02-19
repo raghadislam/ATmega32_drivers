@@ -11,6 +11,11 @@
 /* Macro to be sent in case of no address for master */
 #define TWI_NO_ADDRESS	54
 
+/* Macros to determine if ACK is needed or not */
+#define TWI_NO_ACK		0
+#define TWI_ACK			1
+
+
 /**
  * @brief function to initialize the TWI in master mode.
  *
@@ -80,11 +85,13 @@ ES_t TWI_enuMasterWriteByte(u8 Copy_u8Data);
 /**
  * @brief function to enable the master to read a byte of data.
  *
- * @param[in] Copy_u8Data: the received data.
+ * @param[in] Copy_u8Data: the received data. 
+ * 			  options: 1-TWI_NO_ACK
+ *					   2-TWI_ACK
  *
  * @return the error statues.
  */
-ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data);
+ES_t TWI_enuMasterReadByte(u8* Copy_pu8Data, u8 Copy_u8Ack);
 
 
 /**
